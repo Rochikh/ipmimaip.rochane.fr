@@ -3,421 +3,379 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L'IA avec esprit critique</title>
+    <title>Hybridation et IMAIP</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
         }
-        
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .subtitle {
-            font-size: 1.2em;
-            opacity: 0.95;
-            font-weight: 300;
-        }
-        
-        .central-concept {
-            background: #f8f9fa;
-            padding: 40px;
-            text-align: center;
-            border-bottom: 3px solid #e9ecef;
-        }
-        
-        .loop {
-            display: flex;
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            margin: 30px 0;
-            flex-wrap: wrap;
+            padding: 60px;
+            color: white;
+            text-align: center;
         }
-        
-        .loop-item {
-            background: white;
-            padding: 20px 30px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-weight: 600;
-            color: #2c3e50;
+
+        .slide.active {
+            display: flex;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            text-align: left;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .list-item {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding-left: 30px;
             position: relative;
-            transition: transform 0.3s;
         }
-        
-        .loop-item:hover {
-            transform: translateY(-5px);
-        }
-        
-        .arrow {
-            color: #667eea;
-            font-size: 1.5em;
+
+        .list-item::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
             font-weight: bold;
         }
-        
-        .key-message {
-            background: #667eea;
+
+        .imaip-phase {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 5px solid #ffd700;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .imaip-phase h4 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .imaip-phase p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .example-box {
+            background: rgba(46, 204, 113, 0.2);
+            border: 2px solid #2ecc71;
+            padding: 20px;
+            margin-top: 10px;
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
             color: white;
             padding: 15px 30px;
-            border-radius: 50px;
-            display: inline-block;
-            margin-top: 20px;
-            font-size: 1.1em;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 0;
-        }
-        
-        .section {
-            padding: 40px;
-            position: relative;
-        }
-        
-        .section h2 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .icon {
-            width: 40px;
-            height: 40px;
+            font-size: 1.2rem;
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
-        
-        .danger {
-            background: #fff5f5;
-            border-left: 4px solid #e74c3c;
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
         }
-        
-        .danger .icon {
-            background: #e74c3c;
-            color: white;
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
         }
-        
-        .success {
-            background: #f0fdf4;
-            border-left: 4px solid #27ae60;
-        }
-        
-        .success .icon {
-            background: #27ae60;
-            color: white;
-        }
-        
-        .info {
-            background: #f0f9ff;
-            border-left: 4px solid #3498db;
-        }
-        
-        .info .icon {
-            background: #3498db;
-            color: white;
-        }
-        
-        .warning {
-            background: #fffbeb;
-            border-left: 4px solid #f39c12;
-        }
-        
-        .warning .icon {
-            background: #f39c12;
-            color: white;
-        }
-        
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        li {
-            padding: 12px 0;
-            padding-left: 35px;
-            position: relative;
-            line-height: 1.6;
-        }
-        
-        li:before {
-            content: '';
-            position: absolute;
-            left: 10px;
-            top: 20px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: currentColor;
-            opacity: 0.5;
-        }
-        
-        .example {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .example-label {
-            font-weight: 600;
-            color: #667eea;
-            font-size: 0.9em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .example-text {
-            font-family: 'Courier New', monospace;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            border-left: 3px solid #667eea;
-        }
-        
-        .footer {
-            background: #2c3e50;
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .principle {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
-        .signature {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-size: 0.95em;
-        }
-        
-        .cc-license {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.1);
-            padding: 8px 15px;
+
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
             border-radius: 20px;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
         }
-        
-        .cc-license svg {
-            height: 20px;
-            width: auto;
-            fill: white;
+
+        .warning {
+            color: #ff6b6b;
+            font-weight: 600;
         }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            .loop {
-                flex-direction: column;
-            }
-            
-            .arrow {
-                transform: rotate(90deg);
-            }
-            
-            .signature {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            }
-            50% {
-                box-shadow: 0 4px 25px rgba(102, 126, 234, 0.5);
-            }
-            100% {
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            }
+
+        .highlight {
+            color: #ffd700;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🧠 Utiliser l'IA avec Esprit Critique</h1>
-            <div class="subtitle">Comment transformer ChatGPT en véritable outil de réflexion</div>
+    <div class="slide-container">
+        <!-- Slide 1: Titre -->
+        <div class="slide active">
+            <h1>Hybridation et Pédagogies Actives</h1>
+            <h3>Le modèle IMAIP de Marcel Lebrun</h3>
+            <p style="font-size: 1.2rem; margin-top: 40px;">Master IPM - Innovation et Service e-learning</p>
+            <p style="font-size: 1rem; margin-top: 20px; opacity: 0.9;">Session synchrone - 1 heure</p>
         </div>
-        
-        <div class="central-concept">
-            <h2 style="color: #2c3e50; margin-bottom: 10px;">💡 Le concept clé à comprendre</h2>
-            <p style="font-size: 1.1em; color: #555; margin-bottom: 20px;">
-                L'IA ne "pense" pas, elle prédit le mot suivant le plus probable selon ta question
-            </p>
-            
-            <div class="loop">
-                <div class="loop-item">Ta Question</div>
-                <div class="arrow">→</div>
-                <div class="loop-item">Contexte créé</div>
-                <div class="arrow">→</div>
-                <div class="loop-item">Réponse prédite</div>
-                <div class="arrow">→</div>
-                <div class="loop-item">Ta Question</div>
-            </div>
-            
-            <div class="key-message pulse">
-                ⚡ Tu es co-auteur·ice de chaque réponse de l'IA
+
+        <!-- Slide 2: Programme -->
+        <div class="slide">
+            <h2>Au programme</h2>
+            <div class="content">
+                <div class="list-item">Points de vigilance sur le devoir (15 min)</div>
+                <div class="list-item">Le modèle IMAIP et l'hybridation (30 min)</div>
+                <div class="list-item">Questions et perspectives (10 min)</div>
             </div>
         </div>
-        
-        <div class="grid">
-            <div class="section danger">
-                <h2>
-                    <span class="icon">⚠️</span>
-                    Les pièges à éviter
-                </h2>
-                <ul>
-                    <li><strong>L'effet miroir :</strong> L'IA copie ton style et confirme tes idées</li>
-                    <li><strong>La complaisance :</strong> Elle cherche à te satisfaire plutôt qu'à être exacte</li>
-                    <li><strong>La bulle :</strong> Tu dialogues avec tes propres idées reformulées</li>
-                </ul>
+
+        <!-- Slide 3: Vigilances devoir -->
+        <div class="slide">
+            <h2>Devoir : 3 pièges à éviter</h2>
+            <div class="content">
+                <div class="list-item"><span class="warning">Piège 1 :</span> Confondre multimodalité et hybridation<br>
+                <small style="margin-left: 30px;">L'hybridation = articulation intelligente des modalités</small></div>
                 
-                <div class="example">
-                    <div class="example-label">Piège typique</div>
-                    <div class="example-text">
-                        ❌ "J'ai raison de penser que X est vrai, non ?"<br>
-                        → L'IA va probablement confirmer
-                    </div>
-                </div>
+                <div class="list-item"><span class="warning">Piège 2 :</span> Rester dans le théorique<br>
+                <small style="margin-left: 30px;">On veut du vécu, du concret, ton expérience</small></div>
+                
+                <div class="list-item"><span class="warning">Piège 3 :</span> Vouloir trop en dire<br>
+                <small style="margin-left: 30px;">3 pages max = aller à l'essentiel !</small></div>
             </div>
-            
-            <div class="section success">
-                <h2>
-                    <span class="icon">✨</span>
-                    Techniques pour mieux réfléchir
-                </h2>
-                <ul>
-                    <li><strong>Demander plusieurs angles :</strong> "Donne-moi 3 façons différentes de voir ce problème"</li>
-                    <li><strong>Chercher les failles :</strong> "Où mon raisonnement pourrait être trop simple ?"</li>
-                    <li><strong>Inverser les rôles :</strong> "Quelles questions devrais-je me poser sur ce sujet ?"</li>
-                </ul>
-                
-                <div class="example">
-                    <div class="example-label">Bonne pratique</div>
-                    <div class="example-text">
-                        ✅ "Argumente CONTRE cette idée : [ton idée]"<br>
-                        → Force l'IA à te challenger
-                    </div>
-                </div>
+        </div>
+
+        <!-- Slide 4: IMAIP Introduction -->
+        <div class="slide">
+            <h2>Le modèle IMAIP de Marcel Lebrun</h2>
+            <div class="content">
+                <p style="font-size: 1.2rem; margin-bottom: 30px;">5 phases pour structurer un apprentissage actif :</p>
+                <div class="list-item"><span class="highlight">I</span>nformation</div>
+                <div class="list-item"><span class="highlight">M</span>otivation</div>
+                <div class="list-item"><span class="highlight">A</span>ctivité</div>
+                <div class="list-item"><span class="highlight">I</span>nteraction</div>
+                <div class="list-item"><span class="highlight">P</span>roduction</div>
             </div>
-            
-            <div class="section info">
-                <h2>
-                    <span class="icon">🎯</span>
-                    Comment formuler tes demandes
-                </h2>
-                <ul>
-                    <li><strong>Sois précis·e :</strong> Chaque mot oriente la réponse</li>
-                    <li><strong>Impose des contraintes :</strong> "Explique comme à un·e enfant" ou "En 3 points maximum"</li>
-                    <li><strong>Varie les approches :</strong> Reformule différemment pour explorer</li>
-                </ul>
-                
-                <div class="example">
-                    <div class="example-label">Transformation utile</div>
-                    <div class="example-text">
-                        Au lieu de : "C'est quoi le marketing ?"<br>
-                        Essaie : "Compare 3 définitions contradictoires du marketing"
-                    </div>
+        </div>
+
+        <!-- Slide 5: IMAIP détaillé -->
+        <div class="slide">
+            <h2>IMAIP : Les 5 phases</h2>
+            <div class="content" style="max-width: 1000px;">
+                <div class="imaip-phase">
+                    <h4>Information</h4>
+                    <p>Donner accès aux ressources, aux contenus, aux savoirs</p>
                 </div>
-            </div>
-            
-            <div class="section warning">
-                <h2>
-                    <span class="icon">🔄</span>
-                    Créer de la friction cognitive
-                </h2>
-                <ul>
-                    <li><strong>Force la contradiction :</strong> Demande toujours un contre-argument</li>
-                    <li><strong>Multiplie les perspectives :</strong> "Comment un·e économiste, un·e philosophe et un·e ingénieur·e verraient ce problème ?"</li>
-                    <li><strong>Teste la robustesse :</strong> "Quelle est la plus grosse faiblesse de cette approche ?"</li>
-                </ul>
-                
-                <div class="example">
-                    <div class="example-label">Question puissante</div>
-                    <div class="example-text">
-                        💪 "Si tu devais me convaincre du contraire, quels seraient tes 3 meilleurs arguments ?"
-                    </div>
+                <div class="imaip-phase">
+                    <h4>Motivation</h4>
+                    <p>Créer du sens, donner envie d'apprendre, contextualiser</p>
+                </div>
+                <div class="imaip-phase">
+                    <h4>Activité</h4>
+                    <p>Mettre en action, manipuler, expérimenter, s'exercer</p>
+                </div>
+                <div class="imaip-phase">
+                    <h4>Interaction</h4>
+                    <p>Échanger, collaborer, confronter les points de vue</p>
+                </div>
+                <div class="imaip-phase">
+                    <h4>Production</h4>
+                    <p>Créer quelque chose, montrer qu'on a appris</p>
                 </div>
             </div>
         </div>
-        
-        <div class="footer">
-            <div class="principle">
-                <strong>🎓 Principe fondamental :</strong><br>
-                La qualité de la réponse ne dépend pas de l'intelligence de l'IA,<br>
-                mais de ta capacité à structurer des questions qui génèrent de la réflexion critique.
-            </div>
-            
-            <div class="signature">
-                <span><strong>Rochane Kherbouche</strong></span>
-                <div class="cc-license">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                        <circle cx="32" cy="32" r="30" fill="none" stroke="white" stroke-width="4"/>
-                        <path d="M32 15c-9.4 0-17 7.6-17 17s7.6 17 17 17c4.5 0 8.6-1.7 11.7-4.6l-4.2-3.7c-2.1 1.8-4.7 2.8-7.5 2.8-6.4 0-11.5-5.2-11.5-11.5S25.6 20.5 32 20.5c2.8 0 5.4 1 7.5 2.8l4.2-3.7C40.6 16.7 36.5 15 32 15z"/>
-                        <path d="M41 27c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 5.5c-0.8 0-1.5-0.7-1.5-1.5s0.7-1.5 1.5-1.5 1.5 0.7 1.5 1.5-0.7 1.5-1.5 1.5z"/>
-                    </svg>
-                    <span>CC BY-SA</span>
+
+        <!-- Slide 6: Exemple Jeremy -->
+        <div class="slide">
+            <h2>Exemple concret : Jeremy en crèche</h2>
+            <div class="content" style="max-width: 1000px; font-size: 1rem;">
+                <p style="margin-bottom: 20px;"><strong>Contexte :</strong> Formation de 5 mois pour équipes de crèche</p>
+                
+                <div class="imaip-phase">
+                    <h4>Information</h4>
+                    <div class="example-box">Lectures individuelles sur les pratiques éducatives</div>
+                </div>
+                
+                <div class="imaip-phase">
+                    <h4>Motivation</h4>
+                    <div class="example-box">Observation des situations réelles dans les crèches</div>
+                </div>
+                
+                <div class="imaip-phase">
+                    <h4>Activité</h4>
+                    <div class="example-box">Brainstorming collectif sur les pratiques observées</div>
+                </div>
+                
+                <div class="imaip-phase">
+                    <h4>Interaction</h4>
+                    <div class="example-box">Travail en sous-groupes pour analyser les situations</div>
+                </div>
+                
+                <div class="imaip-phase">
+                    <h4>Production</h4>
+                    <div class="example-box">Restitution collective et plan d'action</div>
                 </div>
             </div>
+        </div>
+
+        <!-- Slide 7: IMAIP et hybridation -->
+        <div class="slide">
+            <h2>IMAIP + Hybridation = ?</h2>
+            <div class="content">
+                <p style="font-size: 1.3rem; margin-bottom: 30px;">Chaque phase IMAIP peut mobiliser différentes modalités :</p>
+                
+                <div class="list-item"><span class="highlight">Information :</span> Vidéo, PDF, podcast, lecture...</div>
+                <div class="list-item"><span class="highlight">Motivation :</span> Témoignage, cas réel, visite terrain...</div>
+                <div class="list-item"><span class="highlight">Activité :</span> Manipulation, jeu de rôle, simulation...</div>
+                <div class="list-item"><span class="highlight">Interaction :</span> Forum, débat, travail de groupe...</div>
+                <div class="list-item"><span class="highlight">Production :</span> Rapport, présentation, prototype...</div>
+                
+                <p style="font-size: 1.2rem; margin-top: 30px; color: #ffd700;">L'hybridation = orchestrer ces modalités de manière cohérente</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Application au devoir -->
+        <div class="slide">
+            <h2>Pour votre devoir</h2>
+            <div class="content">
+                <p style="font-size: 1.3rem; margin-bottom: 30px;">IMAIP peut structurer votre scénario hybride :</p>
+                
+                <div class="list-item">Identifiez votre besoin de formation</div>
+                <div class="list-item">Pensez aux 5 phases IMAIP</div>
+                <div class="list-item">Pour chaque phase, choisissez la ou les modalités pertinentes</div>
+                <div class="list-item">Justifiez vos choix d'articulation</div>
+                
+                <p style="font-size: 1.1rem; margin-top: 30px; font-style: italic;">
+                    Vous n'êtes pas obligé·e·s d'utiliser IMAIP, mais ça peut vous aider à structurer !
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Questions -->
+        <div class="slide">
+            <h2>Vos questions ?</h2>
+            <div class="content">
+                <p style="font-size: 1.4rem; line-height: 2;">
+                    Sur le devoir<br>
+                    Sur l'hybridation<br>
+                    Sur le modèle IMAIP<br>
+                    Sur la suite du module
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Fin -->
+        <div class="slide">
+            <h1>Merci !</h1>
+            <p style="font-size: 1.3rem; margin-top: 40px;">Bon courage pour le devoir</p>
+            <p style="font-size: 1.1rem; margin-top: 20px; opacity: 0.9;">Date de rendu : [à compléter]</p>
         </div>
     </div>
+
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">← Précédent</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">Suivant →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (n >= totalSlides) {
+                currentSlide = totalSlides - 1;
+            } else if (n < 0) {
+                currentSlide = 0;
+            } else {
+                currentSlide = n;
+            }
+            
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (event.key === 'ArrowRight' || event.key === ' ') {
+                event.preventDefault();
+                changeSlide(1);
+            }
+        });
+        
+        // Initialize
+        showSlide(0);
+    </script>
 </body>
 </html>
